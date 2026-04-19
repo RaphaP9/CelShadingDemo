@@ -5,11 +5,15 @@
 struct SurfaceVariables
 {
     float3 normal;
+    float3 view;
     float lightingBands;
     float bandsPowerShift;
-    bool useHighlight;
-    float highlightEdge;
+    float highlightThreshold;
     float hightlightIntensity;
+    float specularThreshold;
+    float specularIntensity;
+    float rimThreshold;
+    float rimIntensity;
 };
     
 float PlaceLightingInBand(float Lighting, float LightingBands)
@@ -36,30 +40,40 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, bool
         bandedLighting = lerp(0.0, bandedLighting, mask); //BandedLighting becomes 0 if diffuse was 0
     }
     
-    if (s.useHighlight) //Use Hightlight if desired
-    {
-        if (diffuse >= s.highlightEdge)
-        {
-            bandedLighting += s.hightlightIntensity;
-        }
-    }   
+    float highlight = diffuse >= s.highlightThreshold ? s.hightlightIntensity : 0.0;
     
-    bandedLighting = pow(bandedLighting, s.bandsPowerShift); //Power the lighting to get a nice effect (enlightening if bandsPowershift < 1, darkening if bandsPowershift > 1)
+    float3 h = SafeNormalize(l.direction + s.view);
+    float primitiveSpecular = saturate(dot(s.normal, h));
+    float specular = primitiveSpecular >= s.specularThreshold ? s.specularIntensity : 0.0;
+    specular = diffuse > 0.0001 ? specular : 0.0;
     
-    return l.color * bandedLighting;
+    float primitiveRim = 1 - dot(s.view, s.normal);
+    float rim = primitiveRim >= s.rimThreshold ? s.rimIntensity : 0.0;
+    rim = diffuse > 0.0001 ? rim : 0.0;
+    
+    bandedLighting = pow(bandedLighting, s.bandsPowerShift); //Power the lighting to get a nice effect
+    
+    float addOn = max(highlight, specular);
+    addOn = max(rim, addOn);
+    
+    return l.color * (bandedLighting + addOn);
 }
 #endif
 
 void LightingCelShaded_float(
     float3 Position,
     float3 Normal,
+    float3 View,
     float LightingBands,
     float MinimumMainLight,
     float MinimumAdditionalLight,
     float BandsPowerShift,
-    bool UseHighlight,
-    float HightlightEdge,
+    float HightlightThreshold,
     float HightlightIntensity,
+    float SpecularThreshold,
+    float SpecularIntensity,
+    float RimThreshold,
+    float RimIntensity,
     out float3 Color
 )
 {
@@ -68,11 +82,15 @@ void LightingCelShaded_float(
 #else
     SurfaceVariables s;
     s.normal = normalize(Normal);
+    s.view = SafeNormalize(View);
     s.lightingBands = LightingBands;
     s.bandsPowerShift = BandsPowerShift;
-    s.useHighlight = UseHighlight;
-    s.highlightEdge = HightlightEdge;
+    s.highlightThreshold = HightlightThreshold;
     s.hightlightIntensity = HightlightIntensity;
+    s.specularThreshold = SpecularThreshold;
+    s.specularIntensity = SpecularIntensity;
+    s.rimThreshold = RimThreshold;
+    s.rimIntensity = RimIntensity;
     
     #if SHADOWS_SCREEN
         float4 clipPos = TransformWorldToHClip(Position);
