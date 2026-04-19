@@ -119,6 +119,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DarkSideMinimumLightMuliplier: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075
@@ -132,6 +133,8 @@ Material:
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
     - _HighlightIntensity: 1
+    - _HighlightThreshold: 0.95
+    - _LightingBands: 3
     - _MAIN_LIGHT_SHADOWS: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _Metallic: 0
@@ -143,12 +146,16 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RimIntensity: 3
+    - _RimThreshold: 1
     - _SHADOWS_SOFT: 0
     - _ShadeBands: 3
     - _ShadeLevels: 2
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpecularIntensity: 3
+    - _SpecularThreshold: 0.995
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0

@@ -26,6 +26,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ADDITIONAL_LIGHTS
+  - _ADDITIONAL_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS_CASCADE
   m_InvalidKeywords: []
@@ -103,7 +104,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ADDITIONAL_LIGHTS: 1
-    - _ADDITIONAL_LIGHT_SHADOWS: 0
+    - _ADDITIONAL_LIGHT_SHADOWS: 1
     - _AddPrecomputedVelocity: 0
     - _AdditionalLightingsWeight: 1
     - _AdditionalLightsFadeBegin: 1
@@ -118,6 +119,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DarkSideMinimumLightMuliplier: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075
@@ -132,7 +134,7 @@ Material:
     - _HighlightEdge: 0.95
     - _HighlightIntensity: 1
     - _HighlightThreshold: 0.95
-    - _LightingBands: 2
+    - _LightingBands: 1
     - _MAIN_LIGHT_SHADOWS: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _Metallic: 0
