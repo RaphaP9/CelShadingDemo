@@ -22,7 +22,7 @@ float PlaceLightingInBand(float Lighting, float LightingBands)
     return floor(Lighting * LightingBands) / LightingBands;
 }
 
-float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier, bool enlightenAllObjectWithMinimumLight)
+float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier, bool enlightenDarkSideWithMinimumLight)
 {
     float diffuse = saturate(dot(s.normal, l.direction));
     //float diffuse = dot(s.normal, l.direction) * 0.5 + 0.5; //Remaping to 0 - 1 //Makes Object enlighten more in zones that otherwise would not enlighten, Also produces artifacts
@@ -36,29 +36,30 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
       
     //Apply either darkSide Lighting or cut all lighting from darkSide
     //Always use enlightenAllObjectWithMinimumLight = false for Additional Lights, otherwise there is not a smooth transition when an additionalLight comes close to the shadered object
-    float darkSideLight = enlightenAllObjectWithMinimumLight ? minimumLight * darkSideMinimumLightMuliplier : 0.0; 
-    bandedLighting = diffuse > 0.0001 ? bandedLighting : darkSideLight;
+    float darkSideLight = enlightenDarkSideWithMinimumLight ? minimumLight * darkSideMinimumLightMuliplier : 0.0;
+    bandedLighting = diffuse > 0.0 ? bandedLighting : darkSideLight;
 
     //Highlight Calculations
-    float highlight = diffuse >= s.highlightThreshold ? s.hightlightIntensity : 0.0;
+    float highlight = diffuse > s.highlightThreshold ? s.hightlightIntensity : 0.0;
     
     //Specular Calculations
     float3 h = SafeNormalize(l.direction + s.view);
     float primitiveSpecular = saturate(dot(s.normal, h));
-    float specular = primitiveSpecular >= s.specularThreshold ? s.specularIntensity : 0.0;
-    specular = diffuse > 0.0001 ? specular : 0.0;
+    float specular = primitiveSpecular > s.specularThreshold ? s.specularIntensity : 0.0; //Only Enlighten parts where the primitive specular is over the threshold
+    specular = diffuse > 0.0 ? specular : 0.0; //Mask with diffuse (do not enlighten parts where diffuse = 0)
     
     //Rim Calculations
     float primitiveRim = 1 - dot(s.view, s.normal);
-    float rim = primitiveRim >= s.rimThreshold ? s.rimIntensity : 0.0;
-    rim = diffuse > 0.0001 ? rim : 0.0;
+    float rim = primitiveRim > s.rimThreshold ? s.rimIntensity : 0.0; //Exact same logic as specular
+    rim = diffuse > 0.0 ? rim : 0.0;
     
     //Find the max value among the three AddOns(Highligh, Specular and Rim)
     float addOn = max(highlight, specular);
     addOn = max(rim, addOn);
     bandedLighting += addOn; //Add to the bandedLighting
     
-    bandedLighting = pow(bandedLighting, s.bandsPowerShift); //Power the lighting to get a nice effect, enlighten bands if < 1, darken if > 1;
+    //Power the lighting to get a nice effect (If bandsPowerShift < 1, enlighten and uniformize lighting, if bandsPowerShift > 1, darken all light but stand out add Ons)
+    bandedLighting = pow(bandedLighting, s.bandsPowerShift); 
     
     return l.color * bandedLighting;
 }
