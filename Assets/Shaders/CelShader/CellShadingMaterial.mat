@@ -24,7 +24,11 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 5f64ad75b112aec4fb429c063ef98b9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ADDITIONAL_LIGHTS
+  - _ADDITIONAL_LIGHT_SHADOWS
+  - _MAIN_LIGHT_SHADOWS
+  - _MAIN_LIGHT_SHADOWS_CASCADE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -99,14 +103,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ADDITIONAL_LIGHTS: 0
-    - _ADDITIONAL_LIGHT_SHADOWS: 0
+    - _ADDITIONAL_LIGHTS: 1
+    - _ADDITIONAL_LIGHT_SHADOWS: 1
     - _AddPrecomputedVelocity: 0
     - _AdditionalLightingsWeight: 1
     - _AdditionalLightsFadeBegin: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _BandsPowerShift: 1
+    - _BandsPowerShift: 1.75
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BottomRemapValue: 0.2
@@ -131,8 +135,8 @@ Material:
     - _HighlightIntensity: 0.5
     - _HighlightThreshold: 0.95
     - _LightingBands: 3
-    - _MAIN_LIGHT_SHADOWS: 0
-    - _MAIN_LIGHT_SHADOWS_CASCADE: 0
+    - _MAIN_LIGHT_SHADOWS: 1
+    - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _Metallic: 0
     - _MinimumAdditionalLight: 0.1
     - _MinimumLight: 0.01
