@@ -19,20 +19,21 @@ struct SurfaceVariables
 float PlaceLightingInBand(float Lighting, float LightingBands)
 {
     LightingBands = max(LightingBands, 1.0); //Keep at least 1 band
-    return floor(Lighting * LightingBands) / LightingBands;
+    return floor(Lighting * LightingBands) / LightingBands; //Use ceil if priority to high light levels is desired
 }
 
 float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier, bool enlightenDarkSideWithMinimumLight)
 {
     float diffuse = saturate(dot(s.normal, l.direction));
-    //float diffuse = dot(s.normal, l.direction) * 0.5 + 0.5; //Remaping to 0 - 1 //Makes Object enlighten more in zones that otherwise would not enlighten, Also produces artifacts
     float attenuation = l.distanceAttenuation * l.shadowAttenuation;
-    attenuation = saturate(attenuation); //Need to saturate attenuation, otherwise it can increase the number of shade levels when attenuation (specifically distance Attenuation) goes over 1
+    attenuation = saturate(attenuation); 
+    //Important to saturate attenuation, otherwise it can increase the number of light bands when attenuation (specifically distance Attenuation) goes over 1 (light very close to the surface).
+    //PlaceLightingInBand(..) expects a 0 - 1 lighting input
     
     diffuse *= attenuation;  
     float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands); //Place Lighting in bands
     
-    bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping
+    bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping using the minimum light
       
     //Apply either darkSide Lighting or cut all lighting from darkSide
     //Always use enlightenAllObjectWithMinimumLight = false for Additional Lights, otherwise there is not a smooth transition when an additionalLight comes close to the shadered object
@@ -53,12 +54,12 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     float rim = primitiveRim > s.rimThreshold ? s.rimIntensity : 0.0; //Exact same logic as specular
     rim = diffuse > 0.0 ? rim : 0.0;
     
-    //Find the max value among the three AddOns(Highligh, Specular and Rim)
+    //Find the max value among the three AddOns(Highligh, Specular and Rim), as we dont want overlapping AddOns, only the more intense
     float addOn = max(highlight, specular);
     addOn = max(rim, addOn);
     bandedLighting += addOn; //Add to the bandedLighting
     
-    //Power the lighting to get a nice effect (If bandsPowerShift < 1, enlighten and uniformize lighting, if bandsPowerShift > 1, darken all light but stand out add Ons)
+    //Power the lighting to get a nice effect (If bandsPowerShift < 1, enlighten and uniformize lighting, if bandsPowerShift > 1, darken all light but stand out addOns)
     bandedLighting = pow(bandedLighting, s.bandsPowerShift); 
     
     return l.color * bandedLighting;

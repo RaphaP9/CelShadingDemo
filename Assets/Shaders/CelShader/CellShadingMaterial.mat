@@ -110,7 +110,7 @@ Material:
     - _AdditionalLightsFadeBegin: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _BandsPowerShift: 1.75
+    - _BandsPowerShift: 2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BottomRemapValue: 0.2
@@ -133,7 +133,7 @@ Material:
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
     - _HighlightIntensity: 0.5
-    - _HighlightThreshold: 0.95
+    - _HighlightThreshold: 0.9
     - _LightingBands: 3
     - _MAIN_LIGHT_SHADOWS: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
@@ -147,7 +147,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RimIntensity: 1
-    - _RimThreshold: 0.7
+    - _RimThreshold: 0.65
     - _SHADOWS_SOFT: 0
     - _ShadeBands: 3
     - _ShadeLevels: 2
@@ -155,7 +155,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
-    - _SpecularThreshold: 0.995
+    - _SpecularThreshold: 0.975
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
