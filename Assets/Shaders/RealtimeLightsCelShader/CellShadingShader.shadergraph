@@ -39,9 +39,6 @@
             "m_Id": "c06d3aaebc5a4823b5c524f8936eceff"
         },
         {
-            "m_Id": "422ad687485f4c89b5188358dfdfd065"
-        },
-        {
             "m_Id": "ed8746530c2947eea9370f8896be7851"
         },
         {
@@ -834,31 +831,6 @@
 }
 
 {
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
-    "m_ObjectId": "422ad687485f4c89b5188358dfdfd065",
-    "m_Guid": {
-        "m_GuidSerialized": "257481f7-4e8d-45a3-be2e-deec4caeea23"
-    },
-    "m_Name": "_SHADOWS_SOFT",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "_SHADOWS_SOFT",
-    "m_DefaultReferenceName": "_SHADOWS_SOFT",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_KeywordType": 0,
-    "m_KeywordDefinition": 0,
-    "m_KeywordScope": 0,
-    "m_KeywordStages": 63,
-    "m_Entries": [],
-    "m_Value": 0,
-    "m_IsEditable": true
-}
-
-{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "467cab6d32634b748246dcfed315daf6",
@@ -896,9 +868,6 @@
         },
         {
             "m_Id": "c06d3aaebc5a4823b5c524f8936eceff"
-        },
-        {
-            "m_Id": "422ad687485f4c89b5188358dfdfd065"
         },
         {
             "m_Id": "ed8746530c2947eea9370f8896be7851"
@@ -1105,7 +1074,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "55dd9b9b44514058bff6f6f2129d37c4",
     "m_Id": 0,
-    "m_DisplayName": "ShadeBands",
+    "m_DisplayName": "LightingBands",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2075,10 +2044,10 @@
     "m_Guid": {
         "m_GuidSerialized": "8b0d8c20-ed34-41a7-a315-0a686002b053"
     },
-    "m_Name": "ShadeBands",
+    "m_Name": "LightingBands",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "ShadeBands",
-    "m_DefaultReferenceName": "_ShadeBands",
+    "m_RefNameGeneratedByDisplayName": "LightingBands",
+    "m_DefaultReferenceName": "_LightingBands",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

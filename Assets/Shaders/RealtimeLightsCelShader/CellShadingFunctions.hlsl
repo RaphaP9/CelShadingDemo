@@ -5,17 +5,17 @@
 struct SurfaceVariables
 {
     float3 normal;
-    float shadeBands;
+    float lightingBands;
     float bandsPowerShift;
     bool useHighlight;
     float highlightEdge;
     float hightlightIntensity;
 };
     
-float PlaceLightingInBand(float Lighting, float ShadeBands)
+float PlaceLightingInBand(float Lighting, float LightingBands)
 {
-    ShadeBands = max(ShadeBands, 1.0); //Keep at least 1 band
-    return floor(Lighting * ShadeBands) / ShadeBands;
+    LightingBands = max(LightingBands, 1.0); //Keep at least 1 band
+    return floor(Lighting * LightingBands) / LightingBands;
 }
 
 float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, bool enlightenAllObjectWithMinimumLight)
@@ -26,18 +26,14 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, bool
     attenuation = saturate(attenuation); //Need to saturate attenuation, otherwise it can increase the number of shade levels when attenuation (specifically distance Attenuation) goes over 1
     
     diffuse *= attenuation;  
-    float bandedLighting = PlaceLightingInBand(diffuse, s.shadeBands); //Place Lighting in bands
+    float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands); //Place Lighting in bands
     
+    bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping
       
-    if (enlightenAllObjectWithMinimumLight)
+    if (!enlightenAllObjectWithMinimumLight)
     {
-        bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping
-    }
-    else
-    {
-        float mask = (diffuse > 0.0001) ? 1.0 : 0.0; //Only enlighten parts where diffuse has a value over 0 (0.0001)
-        float targetLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping
-        bandedLighting = lerp(0.0, targetLighting, mask); //BandedLighting becomes 0 if diffuse was 0
+        float mask = (diffuse > 0.0001) ? 1.0 : 0.0; //Define a mask to only enlighten parts where diffuse has a value over 0 (0.0001)
+        bandedLighting = lerp(0.0, bandedLighting, mask); //BandedLighting becomes 0 if diffuse was 0
     }
     
     if (s.useHighlight) //Use Hightlight if desired
@@ -57,7 +53,7 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, bool
 void LightingCelShaded_float(
     float3 Position,
     float3 Normal,
-    float ShadeBands,
+    float LightingBands,
     float MinimumMainLight,
     float MinimumAdditionalLight,
     float BandsPowerShift,
@@ -72,7 +68,7 @@ void LightingCelShaded_float(
 #else
     SurfaceVariables s;
     s.normal = normalize(Normal);
-    s.shadeBands = ShadeBands;
+    s.lightingBands = LightingBands;
     s.bandsPowerShift = BandsPowerShift;
     s.useHighlight = UseHighlight;
     s.highlightEdge = HightlightEdge;

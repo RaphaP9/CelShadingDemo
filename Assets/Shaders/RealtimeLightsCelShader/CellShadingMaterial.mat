@@ -132,6 +132,7 @@ Material:
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
     - _HighlightIntensity: 1
+    - _LightingBands: 3
     - _MAIN_LIGHT_SHADOWS: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _Metallic: 0
