@@ -28,20 +28,25 @@ float CalculateHighlight(float lighting, float threshold, float intensity)
     return highlight;
 }
 
-float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float lighting, float threshold, float intensity)
+float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity)
 {
-    float3 h = SafeNormalize(lightDirection + viewDirection);
-    float primitiveSpecular = saturate(dot(surfaceNormal, h)); //Primitive specular is a gradient
+    //Blinn-Phon aproximation for specular lighing
+    //Not exaclty phisically accurate but reduces computational power usage
+    //It is not necessary to use a shininess constant due to this being a stylized shader (no need for continous specular)
+    float3 halfVector = SafeNormalize(lightDirection + viewDirection);
+    float primitiveSpecular = saturate(dot(surfaceNormal, halfVector));
     float specular = step(threshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
-    specular = step(0.0001, lighting) * specular; //Mask with diffuse (do not enlighten parts where diffuse = 0 - happens on shadowed parts - use 0.0001 due to step being greater or equal to)
+    //Multiply with banded lighting so specular is influenced by the light band it belongs
+    //Do not produce specular parts where diffuse = 0 (Shadowed or dark parts). Use 0.0001 due to step being greater or equal to)
+    specular *= step(0.0001, diffuse) * bandedLighting; 
     return specular;
 }
 
-float CalculateRim(float3 viewDirection, float3 surfaceNormal, float lighting, float threshold, float intensity)
+float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity)
 {
     float primitiveRim = 1 - dot(viewDirection, surfaceNormal); //Primitive rim is also a gradient
     float rim = step(threshold, primitiveRim) * intensity; //Exact same logic as specular
-    rim = step(0.0001, lighting) * rim;
+    rim *= step(0.0001, diffuse) * bandedLighting;
     return rim;
 }
 
@@ -66,8 +71,8 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
 
     //AddOn Calculations
     float highlight = CalculateHighlight(diffuse, s.highlightThreshold, s.hightlightIntensity);
-    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, s.specularThreshold, s.specularIntensity);
-    float rim = CalculateRim(s.view, s.normal, diffuse, s.rimThreshold, s.rimIntensity);
+    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, bandedLighting, s.specularThreshold, s.specularIntensity);
+    float rim = CalculateRim(s.view, s.normal, diffuse, bandedLighting, s.rimThreshold, s.rimIntensity);
     
     //Find the max value among the three AddOns(Highligh, Specular and Rim), as we dont want overlapping AddOns in each pixel, only the most intense one
     float addOn = max(highlight, max(specular, rim));

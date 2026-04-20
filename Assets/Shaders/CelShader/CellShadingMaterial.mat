@@ -132,7 +132,7 @@ Material:
     - _GlossyReflections: 0
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
-    - _HighlightIntensity: 0.5
+    - _HighlightIntensity: 0
     - _HighlightThreshold: 0.9
     - _LightingBands: 3
     - _MAIN_LIGHT_SHADOWS: 1

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameobjectRotation : MonoBehaviour
+public class GameObjectRotation : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private Vector3 angularVelocity;
