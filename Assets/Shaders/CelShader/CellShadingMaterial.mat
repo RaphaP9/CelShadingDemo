@@ -110,6 +110,8 @@ Material:
     - _AdditionalLightsFadeBegin: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _BandDependantRim: 0
+    - _BandDependantSpecular: 0
     - _BandsPowerShift: 2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
@@ -119,7 +121,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkSideMinimumLightMuliplier: 0.5
+    - _DarkSideMinimumLightMuliplier: 0.25
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075
@@ -132,7 +134,7 @@ Material:
     - _GlossyReflections: 0
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
-    - _HighlightIntensity: 0
+    - _HighlightIntensity: 0.5
     - _HighlightThreshold: 0.9
     - _LightingBands: 3
     - _MAIN_LIGHT_SHADOWS: 1
