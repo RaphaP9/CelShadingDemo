@@ -114,7 +114,7 @@ Material:
     - _BOOLEAN: 0
     - _BandDependantRim: 0
     - _BandDependantSpecular: 0
-    - _BandsPowerShift: 1
+    - _BandsPowerShift: 2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BottomRemapValue: 0.2

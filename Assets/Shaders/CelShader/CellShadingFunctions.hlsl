@@ -161,11 +161,15 @@ void LightingCelShaded_float(
     
     if (UseMainLight)
     {
-        Light mainLight = GetMainLight(shadowCoord);
+        Light mainLight;
         
-        if (!UseMainLightShadows)
+        if (UseMainLightShadows)
         {
-            mainLight.shadowAttenuation = 1.0;
+            mainLight = GetMainLight(shadowCoord);
+        }
+        else
+        {
+            mainLight = GetMainLight();
         }
         
         Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
@@ -182,12 +186,14 @@ void LightingCelShaded_float(
             Light additionalLight;
         
             #if defined(_ADDITIONAL_LIGHT_SHADOWS)
-        
-            additionalLight = GetAdditionalLight(i, Position, 1);
-            
-            if (!UseAdditionalLightsShadows)
+              
+            if (UseAdditionalLightsShadows)
             {
-                additionalLight.shadowAttenuation = 1.0;
+                additionalLight = GetAdditionalLight(i, Position, 1);
+            }
+            else
+            {
+                additionalLight = GetAdditionalLight(i, Position);
             }
             #else
                 additionalLight = GetAdditionalLight(i, Position);
@@ -197,7 +203,7 @@ void LightingCelShaded_float(
             Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
         }
 
-#endif
+        #endif
     }
     #endif
 }
