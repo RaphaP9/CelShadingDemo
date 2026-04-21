@@ -120,6 +120,7 @@ void LightingCelShaded_float(
     float RimThreshold,
     float RimIntensity,
     float BandDependantRim,
+    bool useMainLight,
     out float3 Color
 )
 {
@@ -140,23 +141,28 @@ void LightingCelShaded_float(
     s.rimIntensity = RimIntensity;
     s.bandDependantRim = BandDependantRim;
     
-    #if SHADOWS_SCREEN
+    Color = float3(0.0f, 0.0f, 0.0f);
+    
+    #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
         float4 clipPos = TransformWorldToHClip(Position);
         float4 shadowCoord = ComputeScreenPos(clipPos);
     #else 
         float4 shadowCoord = TransformWorldToShadowCoord(Position);
     #endif
     
-    Light light = GetMainLight(shadowCoord);
-    Color = CalculateCelShading(light, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
+    if (useMainLight) //Using a regular boolean due to MainLight always been assumed to be valid by URP (Using Keywords for it adds complexity on shader variants)
+    {
+        Light mainLight = GetMainLight(shadowCoord);
+        Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
+    }
     
-    #if _ADDITIONAL_LIGHTS
+    #if defined(_ADDITIONAL_LIGHTS)
     int pixelLightCount = GetAdditionalLightsCount();
     
     for (int i = 0; i < pixelLightCount; i++)
     {
-        light = GetAdditionalLight(i, Position, 1);
-        Color += CalculateCelShading(light, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
+        Light additionalLight = GetAdditionalLight(i, Position, 1);
+        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
     }
 #endif
     
