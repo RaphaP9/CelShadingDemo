@@ -1,4 +1,10 @@
-﻿#ifndef CELL_SHADING_FUNCTIONS
+﻿#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+
+#pragma multi_compile _ _ADDITIONAL_LIGHTS
+#pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+
+#ifndef CELL_SHADING_FUNCTIONS
 #define CELL_SHADING_FUNCTIONS
 
 #ifndef SHADERGRAPH_PREVIEW
@@ -120,7 +126,10 @@ void LightingCelShaded_float(
     float RimThreshold,
     float RimIntensity,
     float BandDependantRim,
-    bool useMainLight,
+    bool UseMainLight,
+    bool UseMainLightShadows,
+    bool UseAdditionalLights,
+    bool UseAdditionalLightsShadows,
     out float3 Color
 )
 {
@@ -150,23 +159,45 @@ void LightingCelShaded_float(
         float4 shadowCoord = TransformWorldToShadowCoord(Position);
     #endif
     
-    if (useMainLight) //Using a regular boolean due to MainLight always been assumed to be valid by URP (Using Keywords for it adds complexity on shader variants)
+    if (UseMainLight)
     {
         Light mainLight = GetMainLight(shadowCoord);
+        
+        if (!UseMainLightShadows)
+        {
+            mainLight.shadowAttenuation = 1.0;
+        }
+        
         Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
     }
     
-    #if defined(_ADDITIONAL_LIGHTS)
-    int pixelLightCount = GetAdditionalLightsCount();
-    
-    for (int i = 0; i < pixelLightCount; i++)
+    if (UseAdditionalLights)
     {
-        Light additionalLight = GetAdditionalLight(i, Position, 1);
-        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
-    }
-#endif
-    
-#endif
-}
+        #if defined(_ADDITIONAL_LIGHTS)
 
+        int pixelLightCount = GetAdditionalLightsCount();
+
+        for (int i = 0; i < pixelLightCount; i++)
+        {
+            Light additionalLight;
+        
+            #if defined(_ADDITIONAL_LIGHT_SHADOWS)
+        
+            additionalLight = GetAdditionalLight(i, Position, 1);
+            
+            if (!UseAdditionalLightsShadows)
+            {
+                additionalLight.shadowAttenuation = 1.0;
+            }
+            #else
+                additionalLight = GetAdditionalLight(i, Position);
+            #endif
+
+        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
+        }
+
+        #endif
+    }
+    #endif
+}
 #endif

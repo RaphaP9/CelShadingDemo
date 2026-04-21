@@ -165,8 +165,10 @@ Material:
     - _Surface: 0
     - _UseAdditionalLightings: 1
     - _UseAdditionalLights: 1
+    - _UseAdditionalLightsShadows: 1
     - _UseHighlight: 1
     - _UseMainLight: 1
+    - _UseMainLightShadows: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
