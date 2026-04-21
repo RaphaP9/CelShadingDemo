@@ -111,9 +111,10 @@ Material:
     - _AdditionalLightsFadeBegin: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _BOOLEAN: 0
     - _BandDependantRim: 0
     - _BandDependantSpecular: 0
-    - _BandsPowerShift: 2
+    - _BandsPowerShift: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BottomRemapValue: 0.2
@@ -122,7 +123,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkSideMinimumLightMuliplier: 0.25
+    - _DarkSideMinimumLightMuliplier: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075

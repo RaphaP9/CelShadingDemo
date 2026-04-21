@@ -1,5 +1,6 @@
 ﻿#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_SCREEN
 
 #pragma multi_compile _ _ADDITIONAL_LIGHTS
 #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
@@ -77,7 +78,8 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
 float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier, bool enlightenDarkSideWithMinimumLight)
 {
     float diffuse = saturate(dot(s.normal, l.direction));
-    float attenuation = l.distanceAttenuation * l.shadowAttenuation;
+    float attenuation = l.distanceAttenuation * l.shadowAttenuation;  
+    
     attenuation = saturate(attenuation); 
     //Important to saturate attenuation before multiplying with diffuse
     //Otherwise, if attenuation (specifically distance Attenuation) goes over 1 (surface very close to light source), diffuse * attenuation can go over 1, increasing the number of light bands
@@ -85,9 +87,8 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     
     diffuse *= attenuation;  
     float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands); //Place Lighting in bands
-    
     bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping using the minimum light
-      
+         
     //Apply either darkSide Lighting or cut all lighting from darkSide
     //Always use enlightenAllObjectWithMinimumLight = false for Additional Lights, otherwise there is not a smooth transition when an additionalLight comes close to the shadered object
     float darkSideLight = enlightenDarkSideWithMinimumLight ? minimumLight * darkSideMinimumLightMuliplier : 0.0;
@@ -153,8 +154,7 @@ void LightingCelShaded_float(
     Color = float3(0.0f, 0.0f, 0.0f);
     
     #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
-        float4 clipPos = TransformWorldToHClip(Position);
-        float4 shadowCoord = ComputeScreenPos(clipPos);
+        float4 shadowCoord = ComputeScreenPos(TransformWorldToHClip(Position));
     #else 
         float4 shadowCoord = TransformWorldToShadowCoord(Position);
     #endif
@@ -193,10 +193,11 @@ void LightingCelShaded_float(
                 additionalLight = GetAdditionalLight(i, Position);
             #endif
 
-        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
+        
+            Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
         }
 
-        #endif
+#endif
     }
     #endif
 }
