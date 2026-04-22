@@ -1,0 +1,37 @@
+SHADER SETTINGS
+
+BASE SETTINGS
+- Texture : Albedo (Use if you have one, otherwise leave empty)
+- Color : Base Color (Most of times is better to leave as white)
+
+LIGHTING SETTINGS
+- LightingBands : Number of discretized bands (Use a low number if minimalistic look desired, high number adds a gradient look)
+- MinimumMainLight : The minimum light in the lowest band of main light
+- MinimumAdditionalLight : The minimum light in the lowest band of additional lights
+- DarkSideMinimumLightMultiplier : There is always a dark zone where main light does not reach, this param can control the light in that zone by multiplying with MinimumMainLight
+- PowerShift : Final power shift applied to all lighting (PowerShift > 1: increases intensity on high light zones, decreases intensity on low light zones. PowerShift < 1: Uniformizes all light intensities)
+
+HIGHLIGHT
+- HighlightThreshold : The threshold since where higlight appears
+- HighlightIntensity : Intensity of the highlight (If using specular lighting, keep lower than SpecularIntensity to mantain a coherent visual)
+
+SPECULAR
+- SpecularThreshold : The threshold since where specular lighting appears
+- SpecularIntensity : Intensity of the specular lighting
+- BandDependantSpecular : Allows specular lighing to use the lighting bands to regulate its intensity (True: realistic look. False: striking look)
+
+RIM
+- RimThreshold : The threshold since where rim lighting appears
+- RimIntensity : Intensity of the rim lighting
+- RimCurveFactor : Gives rim a nail look (Nail Look: Thick on center, narrow on sides)
+- BandDependantRim : Allows rim lighing to use the lighting bands to regulate its intensity
+
+AMBIENT LIGHT
+- AmbientLightIntensity : Allows shader to use ambient lighting (Can be used if an ambient based base color is desired in very low light areas)
+
+BOOLEANS 
+(Every boolean is self explanatory)
+- UseMainLight
+- UseMainLightShadows
+- UseAdditionalLights
+- UseAdditionalLightsShadows

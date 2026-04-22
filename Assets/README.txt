@@ -3,6 +3,7 @@ This project is a demo for a Stylized Cel Shading Shader that converts diffuse l
 It extends this with shadows, additional lights, and effects like highlight, specular, and rim lighting. Made in both HLSL and Shadergraph.
 
 DEPENDENCIES
+- Unity 6 (6000.0.55f1 used in this project)
 - Unity URP (17.0.4 used in this project)
 - Forward Renderer (Not Forward+)
 - Additional Lights Enabled (if used)
@@ -15,10 +16,14 @@ PERFORMANCE NOTE
 
 SHADOW BEHAVIOR
 - Shadows are provided by URP, Shadow visibility depends on URP renderer settings.
-- Keywords (such as _ADDITIONAL_LIGHTS, _ADDITIONAL_LIGHT_SHADOWS, etc) used in the HLSL file (CellShadingFunctions.hlsl) are AUTO-DEFINED BY URP. You SHOULD NOT replicate them 
-as ShaderGraph properties, as they are completely driven by URP and should only be read by the HLSL file.
+- Keywords (such as _ADDITIONAL_LIGHTS, _ADDITIONAL_LIGHT_SHADOWS, etc) used in the .hlsl file (CellShadingFunctions.hlsl) are AUTO-DEFINED BY URP. You SHOULD NOT replicate them 
+as ShaderGraph properties, as they are completely driven by URP and should only be read by the .hlsl file.
 - Use the boolean properties (UseMainLight, UseMainLightShadows, etc) in the ShaderGraph to control shadows in the shader. These do NOT enable/disable URP shadows, 
 only control visual application.
+
+EXTRA NOTES
+- When opening the .hlsl file (CellShadingFunctions.hlsl), you might see some errors. These are not actual compilation errors. They are caused by undeclared functions and types 
+that are provided by Unity and URP during shader compilation. They can be safely ignored and will not affect the shader.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

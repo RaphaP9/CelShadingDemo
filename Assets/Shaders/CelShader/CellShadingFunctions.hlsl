@@ -14,7 +14,7 @@ struct SurfaceVariables
     float3 normal;
     float3 view;
     float lightingBands;
-    float bandsPowerShift;
+    float powerShift;
     float highlightThreshold;
     float hightlightIntensity;
     float specularThreshold;
@@ -109,8 +109,8 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     float addOn = max(highlight, max(specular, rim));
     bandedLighting += addOn; //Add to the bandedLighting
     
-    //Power the lighting to get a nice effect (If bandsPowerShift < 1, enlighten and uniformize lighting, if bandsPowerShift > 1, darken all light but stand out addOns)
-    bandedLighting = pow(bandedLighting, s.bandsPowerShift); 
+    //Power the lighting to get a nice effect (If PowerShift < 1, enlighten and uniformize lighting, if PowerShift > 1, darken all light but stand out addOns)
+    bandedLighting = pow(bandedLighting, s.powerShift);
     
     return l.color * bandedLighting;
 }
@@ -124,7 +124,7 @@ void LightingCelShaded_float(
     float MinimumMainLight,
     float MinimumAdditionalLight,
     float DarkSideMinimumLightMuliplier,
-    float BandsPowerShift,
+    float PowerShift,
     float HightlightThreshold,
     float HightlightIntensity,
     float SpecularThreshold,
@@ -148,7 +148,7 @@ void LightingCelShaded_float(
     s.normal = normalize(Normal);
     s.view = SafeNormalize(View);
     s.lightingBands = LightingBands;
-    s.bandsPowerShift = BandsPowerShift;
+    s.powerShift = PowerShift;
     s.highlightThreshold = HightlightThreshold;
     s.hightlightIntensity = HightlightIntensity;
     s.specularThreshold = SpecularThreshold;
