@@ -21,6 +21,11 @@ as ShaderGraph properties, as they are completely driven by URP and should only 
 - Use the boolean properties (UseMainLight, UseMainLightShadows, etc) in the ShaderGraph to control shadows in the shader. These do NOT enable/disable URP shadows, 
 only control visual application.
 
+TRANSPARENCY NOTES
+- When using transparency, please take the following considerations:
+Front/Back Render Face: Use Alpha Blending
+Both Render Face: Use Additive Blending
+
 EXTRA NOTES
 - When opening the .hlsl file (CellShadingFunctions.hlsl), you might see some errors. These are not actual compilation errors. They are caused by undeclared functions and types 
 that are provided by Unity and URP during shader compilation. They can be safely ignored and will not affect the shader.

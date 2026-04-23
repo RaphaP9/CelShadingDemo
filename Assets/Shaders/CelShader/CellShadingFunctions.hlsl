@@ -29,10 +29,10 @@ struct SurfaceVariables
 float PlaceLightingInBand(float Lighting, float LightingBands)
 {
     LightingBands = max(LightingBands, 1.0); //Keep at least 1 band
-    return floor(Lighting * LightingBands) / LightingBands; //Use ceil if priority to high light levels is desired
+    return floor(Lighting * LightingBands) / LightingBands; //Use ceil if priority to high light levels is desired (Usefull when using 1 or 2 bands)
 }
 
-float CalculateHighlight(float lighting, float threshold, float intensity)
+float CalculateHighlight(float diffuse, float threshold, float intensity)
 {
     //Use assertions to avoid unnecessary calculations
     if(intensity <= 0) 
@@ -40,7 +40,10 @@ float CalculateHighlight(float lighting, float threshold, float intensity)
     if (threshold >= 1) 
         return 0;
     
-    float highlight = step(threshold, lighting) * intensity;
+    if (diffuse <= 0) //Do not produce highlighs where diffuse = 0 (Shadowed or dark parts)
+        return 0;
+    
+    float highlight = step(threshold, diffuse) * intensity;
     return highlight;
 }
 
@@ -51,7 +54,7 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     if (threshold >= 1)
         return 0;
     
-    if (diffuse <= 0) //Do not produce specular parts where diffuse = 0 (Shadowed or dark parts)
+    if (diffuse <= 0) //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
         return 0;
     
     //Blinn-Phon aproximation for specular lighing
@@ -82,7 +85,7 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     if (threshold >= 1)
         return 0;
     
-    if (diffuse <= 0) //Same situation as specular
+    if (diffuse <= 0) //Do not produce rim lighting where diffuse = 0 (Shadowed or dark parts)
         return 0;
     
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
