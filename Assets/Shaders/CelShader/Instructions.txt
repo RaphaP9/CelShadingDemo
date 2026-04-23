@@ -12,17 +12,17 @@ LIGHTING SETTINGS
 - PowerShift : Final power shift applied to all lighting (PowerShift > 1: increases intensity on high light zones, decreases intensity on low light zones. PowerShift < 1: Uniformizes all light intensities)
 
 HIGHLIGHT
-- HighlightThreshold : The threshold since where higlight appears
-- HighlightIntensity : Intensity of the highlight (If using specular lighting, keep lower than SpecularIntensity to mantain a coherent visual)
+- HighlightThreshold : The threshold since where higlight appears. Disables the highligh calculations if >= 1
+- HighlightIntensity : Intensity of the highlight (If using specular lighting, keep lower than SpecularIntensity to mantain a coherent visual). Disables the highlight calculations if <= 0
 
 SPECULAR
-- SpecularThreshold : The threshold since where specular lighting appears
-- SpecularIntensity : Intensity of the specular lighting
+- SpecularThreshold : The threshold since where specular lighting appears. Disables the specular calculations if >= 1
+- SpecularIntensity : Intensity of the specular lighting. Disables the specular calculations if <= 0
 - BandDependantSpecular : Allows specular lighing to use the lighting bands to regulate its intensity (True: realistic look. False: striking look)
 
 RIM
-- RimThreshold : The threshold since where rim lighting appears
-- RimIntensity : Intensity of the rim lighting
+- RimThreshold : The threshold since where rim lighting appears. Disables the rim calculations if >= 1
+- RimIntensity : Intensity of the rim lighting. Disables the rim calculations if <= 0
 - RimCurveFactor : Gives rim a nail look (Nail Look: Thick on center, narrow on sides)
 - BandDependantRim : Allows rim lighing to use the lighting bands to regulate its intensity
 

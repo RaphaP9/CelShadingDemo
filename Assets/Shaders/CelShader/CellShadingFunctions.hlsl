@@ -34,12 +34,26 @@ float PlaceLightingInBand(float Lighting, float LightingBands)
 
 float CalculateHighlight(float lighting, float threshold, float intensity)
 {
+    //Use assertions to avoid unnecessary calculations
+    if(intensity <= 0) 
+        return 0;
+    if (threshold >= 1) 
+        return 0;
+    
     float highlight = step(threshold, lighting) * intensity;
     return highlight;
 }
 
 float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity, bool bandDependant)
 {
+    if (intensity <= 0)
+        return 0;
+    if (threshold >= 1)
+        return 0;
+    
+    if (diffuse <= 0) //Do not produce specular parts where diffuse = 0 (Shadowed or dark parts)
+        return 0;
+    
     //Blinn-Phon aproximation for specular lighing
     //Not exaclty phisically accurate but reduces computational power usage
     //It is not necessary to use a shininess constant due to this being a stylized shader (no need for continous specular)
@@ -47,12 +61,10 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     float primitiveSpecular = saturate(dot(surfaceNormal, halfVector));
     
     //Considering threshold values between 0 - 1, we can power the threshold so it is easier to control in the inspector due to the Specular Behavior (0.2 value is arbitrary)
-    float poweredThreshold = pow(threshold, 0.2f); 
+    //The right approach might be to do this by ShaderGraph nodes, but I wanted to give context of this decision
+    float poweredThreshold = pow(abs(threshold), 0.2f); //Use abs only to avoid console warnings
     
     float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
-    
-    //Do not produce specular parts where diffuse = 0 (Shadowed or dark parts). Use 0.0001 due to step being greater or equal to)
-    specular *= step(0.0001, diffuse);
     
     //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
     if (bandDependant)
@@ -65,14 +77,21 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
 
 float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity, float rimCurveFactor, bool bandDependant)
 {
+    if (intensity <= 0)
+        return 0;
+    if (threshold >= 1)
+        return 0;
+    
+    if (diffuse <= 0) //Same situation as specular
+        return 0;
+    
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
     float primitiveRim = 1 - saturate(dot(viewDirection, surfaceNormal)); //Primitive rim is also a gradient     
     primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse
     
     //Exact same logic as specular
     float rim = step(threshold, primitiveRim) * intensity; 
-    rim *= step(0.0001, diffuse);
-    
+
     if (bandDependant)
     {
         rim *= bandedLighting;
@@ -110,7 +129,7 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     bandedLighting += addOn; //Add to the bandedLighting
     
     //Power the lighting to get a nice effect (If PowerShift < 1, enlighten and uniformize lighting, if PowerShift > 1, darken all light but stand out addOns)
-    bandedLighting = pow(bandedLighting, s.powerShift);
+    bandedLighting = pow(abs(bandedLighting), s.powerShift); //Use abs only to avoid console warnings
     
     return l.color * bandedLighting;
 }
@@ -161,18 +180,18 @@ void LightingCelShaded_float(
     
     Color = float3(0.0f, 0.0f, 0.0f);
     
-    #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
-        float4 shadowCoord = ComputeScreenPos(TransformWorldToHClip(Position));
-    #else 
-        float4 shadowCoord = TransformWorldToShadowCoord(Position);
-    #endif
-    
     if (UseMainLight)
     {
         Light mainLight;
         
         if (UseMainLightShadows)
         {
+            #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
+                float4 shadowCoord = ComputeScreenPos(TransformWorldToHClip(Position));
+            #else 
+                float4 shadowCoord = TransformWorldToShadowCoord(Position);
+            #endif
+            
             mainLight = GetMainLight(shadowCoord);
         }
         else
