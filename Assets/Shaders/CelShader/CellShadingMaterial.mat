@@ -29,6 +29,10 @@ Material:
   - _ADDITIONAL_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS_CASCADE
+  - _USEADDITIONALLIGHTS
+  - _USEADDITIONALLIGHTSSHADOWS
+  - _USEMAINLIGHT
+  - _USEMAINLIGHTSHADOWS
   m_InvalidKeywords:
   - _MAIN_LIGHT
   m_LightmapFlags: 4
@@ -168,6 +172,10 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _USEADDITIONALLIGHTS: 1
+    - _USEADDITIONALLIGHTSSHADOWS: 1
+    - _USEMAINLIGHT: 1
+    - _USEMAINLIGHTSHADOWS: 1
     - _UseAdditionalLightings: 1
     - _UseAdditionalLights: 1
     - _UseAdditionalLightsShadows: 1

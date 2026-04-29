@@ -16,10 +16,10 @@ PERFORMANCE NOTE
 
 SHADOW BEHAVIOR
 - Shadows are provided by URP, Shadow visibility depends on URP renderer settings.
-- Keywords (such as _ADDITIONAL_LIGHTS, _ADDITIONAL_LIGHT_SHADOWS, etc) used in the .hlsl file (CellShadingFunctions.hlsl) are AUTO-DEFINED BY URP. You SHOULD NOT replicate them 
-as ShaderGraph properties, as they are completely driven by URP and should only be read by the .hlsl file.
-- Use the boolean properties (UseMainLight, UseMainLightShadows, etc) in the ShaderGraph to control shadows in the shader. These do NOT enable/disable URP shadows, 
-only control visual application.
+- Some Keywords (such as _ADDITIONAL_LIGHTS, _ADDITIONAL_LIGHT_SHADOWS, etc) used in the .hlsl file (CellShadingFunctions.hlsl) are AUTO-DEFINED BY URP. You SHOULD NOT replicate them 
+as ShaderGraph properties, as they are completely driven by URP and should only be read by the .hlsl file. This URP Keywords are the ones defined as #multi_compile in the top lines of the .hlsl.
+- Use the own defined Boolean Keywords (UseMainLight, UseMainLightShadows, etc) exposed in the ShaderGraph to control light and shadow usage in the shader. These enable/disable lights/shadows
+per material. If it is desired to control shadow and lighting usage per material at runtime, consider switching this Boolean Keywords to regular Booleans and modify the .hlsl.
 
 TRANSPARENCY NOTES
 - When using transparency, please take the following considerations:

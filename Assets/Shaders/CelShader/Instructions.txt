@@ -29,7 +29,7 @@ RIM
 AMBIENT LIGHT
 - AmbientLightIntensity : Allows shader to use ambient lighting (Can be used if an ambient based base color is desired in very low light areas)
 
-BOOLEANS 
+BOOLEAN KEYWORDS (This are own created Keywords, not URP defined)
 (Every boolean is self explanatory)
 - UseMainLight
 - UseMainLightShadows

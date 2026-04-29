@@ -156,10 +156,6 @@ void LightingCelShaded_float(
     float RimIntensity,
     float RimCurveFactor,
     float BandDependantRim,
-    bool UseMainLight,
-    bool UseMainLightShadows,
-    bool UseAdditionalLights,
-    bool UseAdditionalLightsShadows,
     out float3 Color
 )
 {
@@ -183,12 +179,10 @@ void LightingCelShaded_float(
     
     Color = float3(0.0f, 0.0f, 0.0f);
     
-    if (UseMainLight)
-    {
+    #if defined (_USEMAINLIGHT)
         Light mainLight;
         
-        if (UseMainLightShadows)
-        {
+        #if defined (_USEMAINLIGHTSHADOWS)
             #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
                 float4 shadowCoord = ComputeScreenPos(TransformWorldToHClip(Position));
             #else 
@@ -196,45 +190,31 @@ void LightingCelShaded_float(
             #endif
             
             mainLight = GetMainLight(shadowCoord);
-        }
-        else
-        {
+        #else
             mainLight = GetMainLight();
-        }
+        #endif
         
         Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
-    }
     
-    if (UseAdditionalLights)
-    {
-        #if defined(_ADDITIONAL_LIGHTS)
-
-        int pixelLightCount = GetAdditionalLightsCount();
-
-        for (int i = 0; i < pixelLightCount; i++)
-        {
-            Light additionalLight;
-        
-            #if defined(_ADDITIONAL_LIGHT_SHADOWS)
-              
-            if (UseAdditionalLightsShadows)
-            {
-                additionalLight = GetAdditionalLight(i, Position, 1);
-            }
-            else
-            {
-                additionalLight = GetAdditionalLight(i, Position);
-            }
-            #else
-                additionalLight = GetAdditionalLight(i, Position);
-            #endif
-
-        
-            Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
-        }
-
-        #endif
-    }
     #endif
+    
+    #if defined(_USEADDITIONALLIGHTS) && defined(_ADDITIONAL_LIGHTS)
+
+    int pixelLightCount = GetAdditionalLightsCount();
+
+    for (int i = 0; i < pixelLightCount; i++)
+    {
+        #if defined(_USEADDITIONALLIGHTSSHADOWS) && defined(_ADDITIONAL_LIGHT_SHADOWS)
+            Light additionalLight = GetAdditionalLight(i, Position, 1);
+        #else
+            Light additionalLight = GetAdditionalLight(i, Position);
+        #endif
+
+        
+        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
+    }
+
+    #endif
+#endif
 }
 #endif
