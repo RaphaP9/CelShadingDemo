@@ -34,16 +34,13 @@ float PlaceLightingInBand(float Lighting, float LightingBands)
 
 float CalculateHighlight(float diffuse, float threshold, float intensity)
 {
-    //Use assertions to avoid unnecessary calculations
+    //Use guard clauses to avoid unnecessary calculations and make an early return, Intensity and Threshold are for each pixel. 'If' Branches wont affect performance.
     if(intensity <= 0) 
         return 0;
     if (threshold >= 1) 
         return 0;
     
-    if (diffuse <= 0) //Do not produce highlighs where diffuse = 0 (Shadowed or dark parts)
-        return 0;
-    
-    float highlight = step(threshold, diffuse) * intensity;
+    float highlight = step(threshold + 1e-5, diffuse) * intensity; //Diffuse must be greater than threhsold
     return highlight;
 }
 
@@ -52,9 +49,6 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     if (intensity <= 0)
         return 0;
     if (threshold >= 1)
-        return 0;
-    
-    if (diffuse <= 0) //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
         return 0;
     
     //Blinn-Phon aproximation for specular lighing
@@ -70,10 +64,10 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
     
     //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
-    if (bandDependant)
-    {
+    if (bandDependant) //bandDependant is for each pixel. No performance cost
         specular *= bandedLighting;
-    }
+    
+    specular *= step(1e-5, diffuse); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
     
     return specular;
 }
@@ -85,9 +79,6 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     if (threshold >= 1)
         return 0;
     
-    if (diffuse <= 0) //Do not produce rim lighting where diffuse = 0 (Shadowed or dark parts)
-        return 0;
-    
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
     float primitiveRim = 1 - saturate(dot(viewDirection, surfaceNormal)); //Primitive rim is also a gradient     
     primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse
@@ -96,9 +87,9 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     float rim = step(threshold, primitiveRim) * intensity; 
 
     if (bandDependant)
-    {
         rim *= bandedLighting;
-    }
+    
+    rim *= step(1e-5, diffuse); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
     
     return rim;
 }
