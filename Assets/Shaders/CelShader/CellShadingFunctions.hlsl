@@ -34,13 +34,15 @@ float PlaceLightingInBand(float Lighting, float LightingBands)
 
 float CalculateHighlight(float diffuse, float threshold, float intensity)
 {
-    //Use guard clauses to avoid unnecessary calculations and make an early return, Intensity and Threshold are for each pixel. 'If' Branches wont affect performance.
+    //Use guard clauses to avoid unnecessary calculations and make an early return, Intensity and Threshold are not Per-Pixel (Uniform). No performance cost on 'If' branches
     if(intensity <= 0) 
         return 0;
     if (threshold >= 1) 
         return 0;
     
-    float highlight = step(threshold + 1e-5, diffuse) * intensity; //Diffuse must be greater than threhsold
+    float highlight = step(threshold, diffuse) * intensity; //Diffuse must be greater than threhsold
+    highlight *= (diffuse > 0); //Do not produce highlight where diffuse = 0
+    
     return highlight;
 }
 
@@ -64,10 +66,10 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
     
     //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
-    if (bandDependant) //bandDependant is for each pixel. No performance cost
+    if (bandDependant) //bandDependant is not Per-Pixel (Uniform). No performance cost
         specular *= bandedLighting;
     
-    specular *= step(1e-5, diffuse); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
+    specular *= (diffuse > 0); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
     
     return specular;
 }
@@ -89,7 +91,7 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     if (bandDependant)
         rim *= bandedLighting;
     
-    rim *= step(1e-5, diffuse); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
+    rim *= (diffuse > 0); //Do not produce rim lighting where diffuse = 0 (Shadowed or dark parts)
     
     return rim;
 }
