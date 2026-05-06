@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CellShadingMaterial
+  m_Name: CelShadingMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 5f64ad75b112aec4fb429c063ef98b9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -116,6 +116,8 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _AmbientLightIntensity: 0
+    - _AttenuationDependantRim: 0
+    - _AttenuationDependantSpecular: 0
     - _BOOLEAN: 0
     - _BandDependantRim: 0
     - _BandDependantSpecular: 0
@@ -150,7 +152,7 @@ Material:
     - _Metallic: 0
     - _MinimumAdditionalLight: 0.1
     - _MinimumLight: 0.01
-    - _MinimumMainLight: 0.1
+    - _MinimumMainLight: 0.2
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _PowerShift: 2

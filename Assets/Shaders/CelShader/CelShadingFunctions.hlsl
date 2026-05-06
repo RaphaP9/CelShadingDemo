@@ -5,8 +5,8 @@
 #pragma multi_compile _ _ADDITIONAL_LIGHTS
 #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 
-#ifndef CELL_SHADING_FUNCTIONS
-#define CELL_SHADING_FUNCTIONS
+#ifndef CEL_SHADING_FUNCTIONS
+#define CEL_SHADING_FUNCTIONS
 
 #ifndef SHADERGRAPH_PREVIEW
 struct SurfaceVariables
@@ -19,10 +19,12 @@ struct SurfaceVariables
     float hightlightIntensity;
     float specularThreshold;
     float specularIntensity;
+    bool attenuationDependantSpecular;
     bool bandDependantSpecular;
     float rimThreshold;
     float rimIntensity;
     float rimCurveFactor;
+    bool attenuationDependantRim;
     bool bandDependantRim;
 };
     
@@ -46,7 +48,7 @@ float CalculateHighlight(float diffuse, float threshold, float intensity)
     return highlight;
 }
 
-float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity, bool bandDependant)
+float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, bool attenuationDependant, bool bandDependant)
 {
     if (intensity <= 0)
         return 0;
@@ -58,12 +60,16 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     //It is not necessary to use a shininess constant due to this being a stylized shader (no need for continous specular)
     float3 halfVector = SafeNormalize(lightDirection + viewDirection);
     float primitiveSpecular = saturate(dot(surfaceNormal, halfVector));
-    
+  
     //Considering threshold values between 0 - 1, we can power the threshold so it is easier to control in the inspector due to the Specular Behavior (0.2 value is arbitrary)
     //The right approach might be to do this by ShaderGraph nodes, but I wanted to give context of this decision
     float poweredThreshold = pow(abs(threshold), 0.2f); //Use abs only to avoid console warnings
     
     float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
+    
+    //Multiply with attenuation if attenuation dependant
+    if (attenuationDependant)
+        specular *= attenuation;
     
     //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
     if (bandDependant) //bandDependant is not Per-Pixel (Uniform). No performance cost
@@ -74,7 +80,7 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     return specular;
 }
 
-float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float bandedLighting, float threshold, float intensity, float rimCurveFactor, bool bandDependant)
+float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, float rimCurveFactor, bool attenuationDependant, bool bandDependant)
 {
     if (intensity <= 0)
         return 0;
@@ -83,11 +89,14 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
     float primitiveRim = 1 - saturate(dot(viewDirection, surfaceNormal)); //Primitive rim is also a gradient     
-    primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse
+    primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse. Note: Can also use the attenuation instead of the diffuse
     
     //Exact same logic as specular
     float rim = step(threshold, primitiveRim) * intensity; 
 
+    if (attenuationDependant)
+        rim *= attenuation;
+    
     if (bandDependant)
         rim *= bandedLighting;
     
@@ -117,8 +126,8 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
 
     //AddOn Calculations
     float highlight = CalculateHighlight(diffuse, s.highlightThreshold, s.hightlightIntensity);
-    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, bandedLighting, s.specularThreshold, s.specularIntensity, s.bandDependantSpecular);
-    float rim = CalculateRim(s.view, s.normal, diffuse, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimCurveFactor, s.bandDependantRim);
+    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, attenuation, bandedLighting, s.specularThreshold, s.specularIntensity, s.attenuationDependantSpecular, s.bandDependantSpecular);
+    float rim = CalculateRim(s.view, s.normal, diffuse, attenuation, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimCurveFactor,s.attenuationDependantRim, s.bandDependantRim);
     
     //Find the max value among the three AddOns(Highligh, Specular and Rim), as we dont want overlapping AddOns in each pixel, only the most intense one
     float addOn = max(highlight, max(specular, rim));
@@ -144,11 +153,13 @@ void LightingCelShaded_float(
     float HightlightIntensity,
     float SpecularThreshold,
     float SpecularIntensity,
-    float BandDependantSpecular,
+    bool AttenuationDependantSpecular, 
+    bool BandDependantSpecular,
     float RimThreshold,
     float RimIntensity,
     float RimCurveFactor,
-    float BandDependantRim,
+    bool AttenuationDependantRim,
+    bool BandDependantRim,
     out float3 Color
 )
 {
@@ -164,10 +175,12 @@ void LightingCelShaded_float(
     s.hightlightIntensity = HightlightIntensity;
     s.specularThreshold = SpecularThreshold;
     s.specularIntensity = SpecularIntensity;
+    s.attenuationDependantSpecular = AttenuationDependantSpecular;
     s.bandDependantSpecular = BandDependantSpecular;
     s.rimThreshold = RimThreshold;
     s.rimIntensity = RimIntensity;
     s.rimCurveFactor = RimCurveFactor;
+    s.attenuationDependantRim = AttenuationDependantRim;
     s.bandDependantRim = BandDependantRim;
     
     Color = float3(0.0f, 0.0f, 0.0f);
