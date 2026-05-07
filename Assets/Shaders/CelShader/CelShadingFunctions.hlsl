@@ -19,13 +19,9 @@ struct SurfaceVariables
     float hightlightIntensity;
     float specularThreshold;
     float specularIntensity;
-    bool attenuationDependantSpecular;
-    bool bandDependantSpecular;
     float rimThreshold;
     float rimIntensity;
     float rimCurveFactor;
-    bool attenuationDependantRim;
-    bool bandDependantRim;
 };
     
 float PlaceLightingInBand(float Lighting, float LightingBands)
@@ -48,7 +44,7 @@ float CalculateHighlight(float diffuse, float threshold, float intensity)
     return highlight;
 }
 
-float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, bool attenuationDependant, bool bandDependant)
+float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity)
 {
     if (intensity <= 0)
         return 0;
@@ -67,20 +63,18 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     
     float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
     
-    //Multiply with attenuation if attenuation dependant
-    if (attenuationDependant)
-        specular *= attenuation;
-    
-    //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
-    if (bandDependant) //bandDependant is not Per-Pixel (Uniform). No performance cost
-        specular *= bandedLighting;
+    #if defined(_SPECULARMODULATIONMODE_ATTENUATION)
+            specular *= attenuation;     //Multiply with attenuation if attenuation dependant
+    #elif defined(_SPECULARMODULATIONMODE_BAND)
+            specular *= bandedLighting; //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
+    #endif
     
     specular *= (diffuse > 0); //Do not produce specular lighting where diffuse = 0 (Shadowed or dark parts)
     
     return specular;
 }
 
-float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, float rimCurveFactor, bool attenuationDependant, bool bandDependant)
+float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, float rimCurveFactor)
 {
     if (intensity <= 0)
         return 0;
@@ -94,11 +88,11 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     //Exact same logic as specular
     float rim = step(threshold, primitiveRim) * intensity; 
 
-    if (attenuationDependant)
-        rim *= attenuation;
-    
-    if (bandDependant)
-        rim *= bandedLighting;
+    #if defined(_RIMMODULATIONMODE_ATTENUATION)
+            rim *= attenuation;     //Multiply with attenuation if attenuation dependant
+    #elif defined(_RIMMODULATIONMODE_BAND)
+            rim *= bandedLighting; //Multiply with banded lighting so specular is influenced by the light band it belongs (more realistic look). No multiplication gives a more garish look
+    #endif
     
     rim *= (diffuse > 0); //Do not produce rim lighting where diffuse = 0 (Shadowed or dark parts)
     
@@ -126,8 +120,8 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
 
     //AddOn Calculations
     float highlight = CalculateHighlight(diffuse, s.highlightThreshold, s.hightlightIntensity);
-    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, attenuation, bandedLighting, s.specularThreshold, s.specularIntensity, s.attenuationDependantSpecular, s.bandDependantSpecular);
-    float rim = CalculateRim(s.view, s.normal, diffuse, attenuation, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimCurveFactor,s.attenuationDependantRim, s.bandDependantRim);
+    float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, attenuation, bandedLighting, s.specularThreshold, s.specularIntensity);
+    float rim = CalculateRim(s.view, s.normal, diffuse, attenuation, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimCurveFactor);
     
     //Find the max value among the three AddOns(Highligh, Specular and Rim), as we dont want overlapping AddOns in each pixel, only the most intense one
     float addOn = max(highlight, max(specular, rim));
@@ -153,13 +147,9 @@ void LightingCelShaded_float(
     float HightlightIntensity,
     float SpecularThreshold,
     float SpecularIntensity,
-    bool AttenuationDependantSpecular, 
-    bool BandDependantSpecular,
     float RimThreshold,
     float RimIntensity,
     float RimCurveFactor,
-    bool AttenuationDependantRim,
-    bool BandDependantRim,
     out float3 Color
 )
 {
@@ -175,13 +165,9 @@ void LightingCelShaded_float(
     s.hightlightIntensity = HightlightIntensity;
     s.specularThreshold = SpecularThreshold;
     s.specularIntensity = SpecularIntensity;
-    s.attenuationDependantSpecular = AttenuationDependantSpecular;
-    s.bandDependantSpecular = BandDependantSpecular;
     s.rimThreshold = RimThreshold;
     s.rimIntensity = RimIntensity;
     s.rimCurveFactor = RimCurveFactor;
-    s.attenuationDependantRim = AttenuationDependantRim;
-    s.bandDependantRim = BandDependantRim;
     
     Color = float3(0.0f, 0.0f, 0.0f);
     

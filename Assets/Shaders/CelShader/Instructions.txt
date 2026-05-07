@@ -18,15 +18,13 @@ HIGHLIGHT
 SPECULAR
 - SpecularThreshold : The threshold since where specular lighting appears. Disables the specular calculations if >= 1
 - SpecularIntensity : Intensity of the specular lighting. Disables the specular calculations if <= 0
-- AttenuationDependantSpecular: Allows specular lighting to use the attenuation as a multiplier. Looks more realistic in scenarios where a light comes close to the object
-- BandDependantSpecular : Allows specular lighing to use the lighting bands to regulate its intensity (True: realistic look. False: striking look)
+- SpecularModulationMode: Allows specular lighting to use the attenuation or banded lighting as a multiplier. Looks more realistic in scenarios where a light comes close to the object
 
 RIM
 - RimThreshold : The threshold since where rim lighting appears. Disables the rim calculations if >= 1
 - RimIntensity : Intensity of the rim lighting. Disables the rim calculations if <= 0
 - RimCurveFactor : Gives rim a nail look (Nail Look: Thick on center, narrow on sides)
-- AttenuationDependantRim: Allows rim lighting to use the attenuation as a multiplier.
-- BandDependantRim : Allows rim lighing to use the lighting bands to regulate its intensity.
+- RimModulationMode: Allows rim lighting to use the attenuation or banded lighting as a multiplier.
 
 AMBIENT LIGHT
 - AmbientLightIntensity : Allows shader to use ambient lighting (Can be used if an ambient based base color is desired in very low light areas)

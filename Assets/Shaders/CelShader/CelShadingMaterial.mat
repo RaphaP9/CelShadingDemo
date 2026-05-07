@@ -29,12 +29,16 @@ Material:
   - _ADDITIONAL_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS_CASCADE
+  - _RIMMODULATIONMODE_NONE
+  - _SPECULARMODULATIONMODE_NONE
   - _USEADDITIONALLIGHTS
   - _USEADDITIONALLIGHTSSHADOWS
   - _USEMAINLIGHT
   - _USEMAINLIGHTSHADOWS
   m_InvalidKeywords:
   - _MAIN_LIGHT
+  - _RIMBLENDINGMODE_NONE
+  - _SPECULARBLENDINGMODE_NONE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -158,12 +162,16 @@ Material:
     - _PowerShift: 2
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RIMBLENDINGMODE: 0
+    - _RIMMODULATIONMODE: 0
     - _ReceiveShadows: 1
     - _RimCurveFactor: 0
     - _RimIntensity: 1
     - _RimPinch: 0.445
     - _RimThreshold: 0.65
     - _SHADOWS_SOFT: 0
+    - _SPECULARBLENDINGMODE: 0
+    - _SPECULARMODULATIONMODE: 0
     - _ShadeBands: 3
     - _ShadeLevels: 2
     - _Smoothness: 0.5
