@@ -4,6 +4,7 @@ public class GameObjectRotation : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private Vector3 angularVelocity;
+
     private void Update()
     {
         HandleRotation();
