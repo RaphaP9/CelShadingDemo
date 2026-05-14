@@ -29,7 +29,7 @@ Material:
   - _ADDITIONAL_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS_CASCADE
-  - _RIMMODULATIONMODE_NONE
+  - _RIMMODULATIONMODE_ATTENUATION
   - _SPECULARMODULATIONMODE_NONE
   - _USEADDITIONALLIGHTS
   - _USEADDITIONALLIGHTSSHADOWS
@@ -150,6 +150,7 @@ Material:
     - _HighlightIntensity: 0.5
     - _HighlightThreshold: 0.9
     - _LightingBands: 3
+    - _LightingBandsBias: 0
     - _MAIN_LIGHT: 1
     - _MAIN_LIGHT_SHADOWS: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
@@ -163,7 +164,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RIMBLENDINGMODE: 0
-    - _RIMMODULATIONMODE: 0
+    - _RIMMODULATIONMODE: 1
     - _ReceiveShadows: 1
     - _RimCurveFactor: 0
     - _RimIntensity: 1

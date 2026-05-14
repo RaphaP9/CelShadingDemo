@@ -14,6 +14,7 @@ struct SurfaceVariables
     float3 normal;
     float3 view;
     float lightingBands;
+    float lightingBandsBias;
     float powerShift;
     float highlightThreshold;
     float hightlightIntensity;
@@ -24,10 +25,17 @@ struct SurfaceVariables
     float rimCurveFactor;
 };
     
-float PlaceLightingInBand(float Lighting, float LightingBands)
+float PlaceLightingInBand(float Lighting, float LightingBands, float LightingBandsBias)
 {
     LightingBands = max(LightingBands, 1.0); //Keep at least 1 band
-    return floor(Lighting * LightingBands) / LightingBands; //Use ceil if priority to high light levels is desired (Usefull when using 1 or 2 bands)
+    
+    float floorValue = floor(Lighting * LightingBands) / LightingBands; //Eg. if there are 4 bands, values used are 0, 0.25, 0.5 and 0.75
+    float ceilValue = ceil(Lighting * LightingBands) / LightingBands; //Eg. if there are 4 bands, values used are 0.25, 0.5, 0.75 and 1
+    
+    //Lerp the band value according to bias
+    float biasedValue = lerp(floorValue, ceilValue, LightingBandsBias); 
+    
+    return biasedValue;
 }
 
 float CalculateHighlight(float diffuse, float threshold, float intensity)
@@ -110,7 +118,7 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     //PlaceLightingInBand(..) expects a 0 - 1 lighting input
     
     diffuse *= attenuation;  
-    float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands); //Place Lighting in bands
+    float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands, s.lightingBandsBias); //Place Lighting in bands
     bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping using the minimum light
          
     //Apply either darkSide Lighting or cut all lighting from darkSide
@@ -139,6 +147,7 @@ void LightingCelShaded_float(
     float3 Normal,
     float3 View,
     float LightingBands,
+    float LightingBandsBias,
     float MinimumMainLight,
     float MinimumAdditionalLight,
     float DarkSideMinimumLightMuliplier,
@@ -160,6 +169,7 @@ void LightingCelShaded_float(
     s.normal = normalize(Normal);
     s.view = SafeNormalize(View);
     s.lightingBands = LightingBands;
+    s.lightingBandsBias = LightingBandsBias;
     s.powerShift = PowerShift;
     s.highlightThreshold = HightlightThreshold;
     s.hightlightIntensity = HightlightIntensity;

@@ -6,6 +6,7 @@ BASE SETTINGS
 
 LIGHTING SETTINGS
 - LightingBands : Number of discretized bands (Use a low number if minimalistic look desired, high number adds a gradient look)
+- LightingBandsBias : Control the bands bias towards darker bands (LightingBandsBias = 0) or more bright bands (LightingBandsBias = 1, highly recommended for low band number and Toon Shading). Intermediate values are lerped.
 - MinimumMainLight : The minimum light in the lowest band of main light
 - MinimumAdditionalLight : The minimum light in the lowest band of additional lights
 - DarkSideMinimumLightMultiplier : There is always a dark zone where main light does not reach, this param can control the light in that zone by multiplying with MinimumMainLight
