@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CelShadingMaterial
+  m_Name: RealisticShadingMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 5f64ad75b112aec4fb429c063ef98b9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -29,8 +29,8 @@ Material:
   - _ADDITIONAL_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS
   - _MAIN_LIGHT_SHADOWS_CASCADE
-  - _RIMMODULATIONMODE_NONE
-  - _SPECULARMODULATIONMODE_NONE
+  - _RIMMODULATIONMODE_ATTENUATION
+  - _SPECULARMODULATIONMODE_ATTENUATION
   - _USEADDITIONALLIGHTS
   - _USEADDITIONALLIGHTSSHADOWS
   - _USEMAINLIGHT
@@ -120,7 +120,7 @@ Material:
     - _AdditionalLightsFadeBegin: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _AmbientLightIntensity: 0
+    - _AmbientLightIntensity: 1
     - _AttenuationDependantRim: 0
     - _AttenuationDependantSpecular: 0
     - _BOOLEAN: 0
@@ -136,7 +136,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkSideMinimumLightMuliplier: 0.5
+    - _DarkSideMinimumLightMuliplier: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075
@@ -149,9 +149,9 @@ Material:
     - _GlossyReflections: 0
     - _Highlight: 5.66
     - _HighlightEdge: 0.95
-    - _HighlightIntensity: 0.5
+    - _HighlightIntensity: 0
     - _HighlightThreshold: 0.9
-    - _LightingBands: 3
+    - _LightingBands: 10
     - _LightingBandsBias: 0
     - _MAIN_LIGHT: 1
     - _MAIN_LIGHT_SHADOWS: 1
@@ -159,29 +159,29 @@ Material:
     - _Metallic: 0
     - _MinimumAdditionalLight: 0.1
     - _MinimumLight: 0.01
-    - _MinimumMainLight: 0.2
+    - _MinimumMainLight: 0.1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _PowerShift: 2
+    - _PowerShift: 1.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RIMBLENDINGMODE: 0
-    - _RIMMODULATIONMODE: 0
+    - _RIMMODULATIONMODE: 1
     - _ReceiveShadows: 1
-    - _RimCurveFactor: 0
+    - _RimCurveFactor: 0.5
     - _RimIntensity: 1
     - _RimPinch: 0.445
-    - _RimThreshold: 0.65
+    - _RimThreshold: 0.7
     - _SHADOWS_SOFT: 0
     - _SPECULARBLENDINGMODE: 0
-    - _SPECULARMODULATIONMODE: 0
+    - _SPECULARMODULATIONMODE: 1
     - _ShadeBands: 3
     - _ShadeLevels: 2
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
-    - _SpecularThreshold: 0.975
+    - _SpecularThreshold: 0.985
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0

@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CelShadingMaterial
+  m_Name: TransparentBothFacesShadingMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 5f64ad75b112aec4fb429c063ef98b9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -31,6 +31,7 @@ Material:
   - _MAIN_LIGHT_SHADOWS_CASCADE
   - _RIMMODULATIONMODE_NONE
   - _SPECULARMODULATIONMODE_NONE
+  - _SURFACE_TYPE_TRANSPARENT
   - _USEADDITIONALLIGHTS
   - _USEADDITIONALLIGHTSSHADOWS
   - _USEMAINLIGHT
@@ -42,11 +43,12 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: Opaque
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -127,20 +129,20 @@ Material:
     - _BandDependantRim: 0
     - _BandDependantSpecular: 0
     - _BandsPowerShift: 2
-    - _Blend: 0
+    - _Blend: 2
     - _BlendModePreserveSpecular: 1
     - _BottomRemapValue: 0.2
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DarkSideMinimumLightMuliplier: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075
-    - _DstBlend: 0
+    - _DstBlend: 1
     - _DstBlendAlpha: 0
     - _EdgeDiffuse: 3
     - _EnvironmentReflections: 1
@@ -159,7 +161,7 @@ Material:
     - _Metallic: 0
     - _MinimumAdditionalLight: 0.1
     - _MinimumLight: 0.01
-    - _MinimumMainLight: 0.2
+    - _MinimumMainLight: 0.3
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _PowerShift: 2
@@ -182,9 +184,9 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1
     - _SpecularThreshold: 0.975
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
-    - _Surface: 0
+    - _Surface: 1
     - _Transparency: 1
     - _USEADDITIONALLIGHTS: 1
     - _USEADDITIONALLIGHTSSHADOWS: 1
@@ -198,10 +200,10 @@ Material:
     - _UseMainLightShadows: 1
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 0.39215687}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlighColor: {r: 2, g: 2, b: 2, a: 1}

@@ -2,7 +2,7 @@ SHADER SETTINGS
 
 BASE SETTINGS
 - Texture : Albedo (Use if you have one, otherwise leave empty)
-- Color : Base Color (Most of times is better to leave as white)
+- BaseColor : Base Color (Most of times is better to leave as white) - For Transparent Surface Type, use the Base Color Alpha to regulate the Transparency Alpha
 
 LIGHTING SETTINGS
 - LightingBands : Number of discretized bands (Use a low number if minimalistic look desired, high number adds a gradient look)
