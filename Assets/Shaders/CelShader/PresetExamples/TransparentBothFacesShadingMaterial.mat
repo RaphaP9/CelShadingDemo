@@ -138,7 +138,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 0
     - _Cutoff: 0.5
-    - _DarkSideMinimumLightMuliplier: 0.5
+    - _DarkSideMinimumLightMuliplier: 0.2
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistanceAttenFadeThreshold: 0.075

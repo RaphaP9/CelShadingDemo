@@ -107,7 +107,7 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     return rim;
 }
 
-float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier, bool enlightenDarkSideWithMinimumLight)
+float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, float darkSideMinimumLightMuliplier)
 {
     float diffuse = saturate(dot(s.normal, l.direction));
     float attenuation = l.distanceAttenuation * l.shadowAttenuation;  
@@ -121,10 +121,11 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     float bandedLighting = PlaceLightingInBand(diffuse, s.lightingBands, s.lightingBandsBias); //Place Lighting in bands
     bandedLighting = lerp(minimumLight, 1.0, bandedLighting); //Remapping using the minimum light
          
-    //Apply either darkSide Lighting or cut all lighting from darkSide
-    //Always use enlightenAllObjectWithMinimumLight = false for Additional Lights, otherwise there is not a smooth transition when an additionalLight comes close to the shadered object
-    float darkSideLight = enlightenDarkSideWithMinimumLight ? minimumLight * darkSideMinimumLightMuliplier : 0.0;
-    bandedLighting = diffuse > 0.0 ? bandedLighting : darkSideLight;
+    //Apply a minimum light to DarkSide Pixels depending on the lowest band lighting possible
+    float darkSideMask = diffuse <= 0; //Get the mask for DarkSide pixels
+    float lowestBandedLighting = PlaceLightingInBand(0.00001, s.lightingBands, s.lightingBandsBias); //Get the lowest band lighting possible
+    lowestBandedLighting = lerp(minimumLight, 1.0, lowestBandedLighting); //Remapping using the minimum light
+    bandedLighting = lerp(bandedLighting, lowestBandedLighting * darkSideMinimumLightMuliplier, darkSideMask); //Apply the minimum light to only DarkSidePixels
 
     //AddOn Calculations
     float highlight = CalculateHighlight(diffuse, s.highlightThreshold, s.hightlightIntensity);
@@ -196,7 +197,7 @@ void LightingCelShaded_float(
             mainLight = GetMainLight();
         #endif
         
-        Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier, true);
+        Color += CalculateCelShading(mainLight, s, MinimumMainLight, DarkSideMinimumLightMuliplier);
     
     #endif
     
@@ -213,7 +214,7 @@ void LightingCelShaded_float(
         #endif
 
         
-        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, DarkSideMinimumLightMuliplier, false);
+        Color += CalculateCelShading(additionalLight, s, MinimumAdditionalLight, 0);
     }
 
     #endif
