@@ -64,12 +64,8 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     //It is not necessary to use a shininess constant due to this being a stylized shader (no need for continous specular)
     float3 halfVector = SafeNormalize(lightDirection + viewDirection);
     float primitiveSpecular = saturate(dot(surfaceNormal, halfVector));
-  
-    //Considering threshold values between 0 - 1, we can power the threshold so it is easier to control in the inspector due to the Specular Behavior (0.2 value is arbitrary)
-    //The right approach might be to do this by ShaderGraph nodes, but I wanted to give context of this decision
-    float poweredThreshold = pow(abs(threshold), 0.2f); //Use abs only to avoid console warnings
     
-    float specular = step(poweredThreshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
+    float specular = step(threshold, primitiveSpecular) * intensity; //Only Enlighten parts where the primitive specular is over the threshold
     
     #if defined(_SPECULARMODULATIONMODE_ATTENUATION)
             specular *= attenuation;     //Multiply with attenuation if attenuation dependant
