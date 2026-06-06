@@ -88,7 +88,7 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
     float primitiveRim = 1 - saturate(dot(viewDirection, surfaceNormal)); //Primitive rim is also a gradient     
-    primitiveRim = pow(primitiveRim, rimPower);
+    primitiveRim = pow(abs(primitiveRim), rimPower);
     primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse. Note: Can also use the attenuation instead of the diffuse
     
     //Exact same logic as specular
