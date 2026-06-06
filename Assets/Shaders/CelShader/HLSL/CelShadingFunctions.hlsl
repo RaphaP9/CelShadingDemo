@@ -22,6 +22,7 @@ struct SurfaceVariables
     float specularIntensity;
     float rimThreshold;
     float rimIntensity;
+    float rimPower;
     float rimCurveFactor;
 };
     
@@ -78,7 +79,7 @@ float CalculateSpecular(float3 lightDirection, float3 viewDirection, float3 surf
     return specular;
 }
 
-float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, float rimCurveFactor)
+float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, float attenuation, float bandedLighting, float threshold, float intensity, float rimPower, float rimCurveFactor)
 {
     if (intensity <= 0)
         return 0;
@@ -87,6 +88,7 @@ float CalculateRim(float3 viewDirection, float3 surfaceNormal, float diffuse, fl
     
     //Produce a sort of simplified fresnel effect (using linear gradient) accross the surface of the object
     float primitiveRim = 1 - saturate(dot(viewDirection, surfaceNormal)); //Primitive rim is also a gradient     
+    primitiveRim = pow(primitiveRim, rimPower);
     primitiveRim *= lerp(1.0, diffuse, rimCurveFactor); //Give rim a curvature/nail shape (Thick on center, narrow on sides) using the diffuse. Note: Can also use the attenuation instead of the diffuse
     
     //Exact same logic as specular
@@ -126,7 +128,7 @@ float3 CalculateCelShading(Light l, SurfaceVariables s, float minimumLight, floa
     //AddOn Calculations
     float highlight = CalculateHighlight(diffuse, s.highlightThreshold, s.hightlightIntensity);
     float specular = CalculateSpecular(l.direction, s.view, s.normal, diffuse, attenuation, bandedLighting, s.specularThreshold, s.specularIntensity);
-    float rim = CalculateRim(s.view, s.normal, diffuse, attenuation, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimCurveFactor);
+    float rim = CalculateRim(s.view, s.normal, diffuse, attenuation, bandedLighting, s.rimThreshold, s.rimIntensity, s.rimPower, s.rimCurveFactor);
     
     //Find the max value among the three AddOns(Highligh, Specular and Rim), as we dont want overlapping AddOns in each pixel, only the most intense one
     float addOn = max(highlight, max(specular, rim));
@@ -155,6 +157,7 @@ void LightingCelShaded_float(
     float SpecularIntensity,
     float RimThreshold,
     float RimIntensity,
+    float RimPower,
     float RimCurveFactor,
     out float3 Color
 )
@@ -174,6 +177,7 @@ void LightingCelShaded_float(
     s.specularIntensity = SpecularIntensity;
     s.rimThreshold = RimThreshold;
     s.rimIntensity = RimIntensity;
+    s.rimPower = RimPower;
     s.rimCurveFactor = RimCurveFactor;
     
     Color = float3(0.0f, 0.0f, 0.0f);

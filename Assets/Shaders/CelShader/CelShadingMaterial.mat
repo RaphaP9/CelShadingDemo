@@ -171,6 +171,7 @@ Material:
     - _RimCurveFactor: 0
     - _RimIntensity: 1
     - _RimPinch: 0.445
+    - _RimPower: 1
     - _RimThreshold: 0.65
     - _SHADOWS_SOFT: 0
     - _SPECULARBLENDINGMODE: 0
