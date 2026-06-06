@@ -1496,10 +1496,10 @@
     "m_Guid": {
         "m_GuidSerialized": "556b6ae2-7c31-43e5-9714-7c5fd748920b"
     },
-    "m_Name": "MinimumMainLight",
+    "m_Name": "MainLightLowestBandValue",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MinimumMainLight",
-    "m_DefaultReferenceName": "_MinimumMainLight",
+    "m_RefNameGeneratedByDisplayName": "MainLightLowestBandValue",
+    "m_DefaultReferenceName": "_MainLightLowestBandValue",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1669,7 +1669,7 @@
     "m_Title": "Cel Shading Lighting",
     "m_Position": {
         "x": -2243.0,
-        "y": -125.00003814697266
+        "y": -125.00003051757813
     }
 }
 
@@ -2086,6 +2086,9 @@
         },
         {
             "m_Id": "046cf8cdb76441e48e21920512f8c7eb"
+        },
+        {
+            "m_Id": "cfacf8344e3642cd9f9cdd48c1aea582"
         }
     ]
 }
@@ -2245,8 +2248,8 @@
     "m_ObjectId": "4e39a22aff7c49d39cfff6c2db1fae98",
     "m_Title": "Ambient Lighting",
     "m_Position": {
-        "x": -1343.0,
-        "y": 227.00003051757813
+        "x": -1343.0001220703125,
+        "y": 226.99993896484376
     }
 }
 
@@ -2291,10 +2294,10 @@
     "m_Guid": {
         "m_GuidSerialized": "ed1ba9b0-f4e8-4423-b9d8-0390597bdc2a"
     },
-    "m_Name": "MinimumAdditionalLight",
+    "m_Name": "AdditionalLightsLowestBandValue",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MinimumAdditionalLight",
-    "m_DefaultReferenceName": "_MinimumAdditionalLight",
+    "m_RefNameGeneratedByDisplayName": "AdditionalLightsLowestBandValue",
+    "m_DefaultReferenceName": "_AdditionalLightsLowestBandValue",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -2392,7 +2395,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "54bf218d5e214551a32d3aab5d7796a9",
-    "m_Name": "Specular",
+    "m_Name": "Specular Settings",
     "m_ChildObjectList": [
         {
             "m_Id": "456445b4cf2347fa88e9d68527fa1eb7"
@@ -2642,24 +2645,9 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "685c27fd49404ccd9e99ad2705a2b98e",
-    "m_Id": 5,
-    "m_DisplayName": "MinimumMainLight",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "MinimumMainLight",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "68cd09a10b8b4996bccd7073f2f03c01",
     "m_Id": 0,
-    "m_DisplayName": "MinimumMainLight",
+    "m_DisplayName": "MainLightLowestBandValue",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2721,7 +2709,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "6a0b7493fa6d469cb990ff84dcba638a",
-    "m_Name": "Lighting Settings",
+    "m_Name": "Banding Settings",
     "m_ChildObjectList": [
         {
             "m_Id": "c6d20279e0fd477f9200ead7e6f3e690"
@@ -2737,9 +2725,6 @@
         },
         {
             "m_Id": "81f7d632670b4e998aa5382b881ed668"
-        },
-        {
-            "m_Id": "cfacf8344e3642cd9f9cdd48c1aea582"
         }
     ]
 }
@@ -2959,6 +2944,21 @@
         "b": 0.0,
         "a": 0.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "7186c746153d4db3bba9986fcc5baffe",
+    "m_Id": 5,
+    "m_DisplayName": "MainLightLowestBandValue",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "MainLightLowestBandValue",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -3196,8 +3196,8 @@
     "m_ObjectId": "7fb26d5cca1a4933b7f2922941252863",
     "m_Title": "Base Color & Texture",
     "m_Position": {
-        "x": -367.0,
-        "y": 230.00003051757813
+        "x": -367.00018310546877,
+        "y": 229.99993896484376
     }
 }
 
@@ -3245,10 +3245,10 @@
     "m_Guid": {
         "m_GuidSerialized": "5f83fba0-7ae8-4af7-b062-80ee1f44dc43"
     },
-    "m_Name": "DarkSideMinimumLightMuliplier",
+    "m_Name": "MainLightMinimumLight",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "DarkSideMinimumLightMuliplier",
-    "m_DefaultReferenceName": "_DarkSideMinimumLightMuliplier",
+    "m_RefNameGeneratedByDisplayName": "MainLightMinimumLight",
+    "m_DefaultReferenceName": "_MainLightMinimumLight",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -3264,21 +3264,6 @@
         "x": 0.0,
         "y": 1.0
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "84e14652f5c14bb28076759b8abd8e34",
-    "m_Id": 16,
-    "m_DisplayName": "DarkSideMinimumLightMuliplier",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "DarkSideMinimumLightMuliplier",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
@@ -3684,7 +3669,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "a02f7f97492b4605868b66d6cd2fc564",
-    "m_Name": "Highlight",
+    "m_Name": "Highlight Settings",
     "m_ChildObjectList": [
         {
             "m_Id": "54ff9c0c6a1e4e39bab6400315c1ffb1"
@@ -3700,7 +3685,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "a2851aaf2739400b85a5d654fdfc1ab2",
     "m_Id": 0,
-    "m_DisplayName": "DarkSideMinimumLightMuliplier",
+    "m_DisplayName": "MainLightMinimumLight",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3743,7 +3728,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "a5a9d33c23df4870ae105e932f8a8f11",
     "m_Id": 0,
-    "m_DisplayName": "MinimumAdditionalLight",
+    "m_DisplayName": "AdditionalLightsLowestBandValue",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4253,7 +4238,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "c4e6a002be47405f84bc18c00430851d",
-    "m_Name": "Rim",
+    "m_Name": "Rim Settings",
     "m_ChildObjectList": [
         {
             "m_Id": "a53baa5b615c47bb88eb8f5db0eeb1c4"
@@ -4472,12 +4457,12 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "d50dad0041714111a83b4cbed7ea9c1c",
-    "m_Id": 10,
-    "m_DisplayName": "MinimumAdditionalLight",
+    "m_ObjectId": "d09c324acc0c486b9d38e421c9832697",
+    "m_Id": 16,
+    "m_DisplayName": "MinimumMainLight",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "MinimumAdditionalLight",
+    "m_ShaderOutputName": "MinimumMainLight",
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -4719,13 +4704,13 @@
             "m_Id": "140be889b0534d929fd2ada646a2e879"
         },
         {
-            "m_Id": "685c27fd49404ccd9e99ad2705a2b98e"
+            "m_Id": "7186c746153d4db3bba9986fcc5baffe"
         },
         {
-            "m_Id": "d50dad0041714111a83b4cbed7ea9c1c"
+            "m_Id": "e8fcb48fabca42d7b8cd517896aa05fe"
         },
         {
-            "m_Id": "84e14652f5c14bb28076759b8abd8e34"
+            "m_Id": "d09c324acc0c486b9d38e421c9832697"
         },
         {
             "m_Id": "76a2a7f391cd4d558040ad459df91f96"
@@ -4792,6 +4777,21 @@
 }
 
 {
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "e8fcb48fabca42d7b8cd517896aa05fe",
+    "m_Id": 10,
+    "m_DisplayName": "AdditionalLightsLowestBandValue",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "AdditionalLightsLowestBandValue",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
     "m_SGVersion": 1,
     "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
     "m_ObjectId": "efa441db5c07437283a9fc2d3413d8fe",
@@ -4823,7 +4823,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "efdcbc473b124b29bdcabe793de34631",
-    "m_Name": "Booleans",
+    "m_Name": "Boolean Keywords",
     "m_ChildObjectList": [
         {
             "m_Id": "7d64476c056547babd9c918995ef1d01"
@@ -4931,7 +4931,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "fe79de5dd2ad47b2a0d315f49ff79728",
-    "m_Name": "Ambient Light",
+    "m_Name": "Ambient Settings",
     "m_ChildObjectList": [
         {
             "m_Id": "2b4ef548026f48609902f09c30c0394e"
