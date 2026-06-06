@@ -24,6 +24,7 @@ SPECULAR
 RIM
 - RimThreshold : The threshold since where rim lighting appears. Disables the rim calculations if >= 1
 - RimIntensity : Intensity of the rim lighting. Disables the rim calculations if <= 0
+- RimPower: Controls Rim Thickness (Similar to Fresnel Power). Use in combination with RimCurveFactor to achieve a more stylized look.
 - RimCurveFactor : Gives rim a nail look (Nail Look: Thick on center, narrow on sides)
 - RimModulationMode: Allows rim lighting to use the attenuation or banded lighting as a multiplier.
 
